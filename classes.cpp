@@ -1,75 +1,85 @@
 #include <iostream>
-using namespace std;
-struct Point2D{
-    int x;
-    int y;
-};
-int gcd(int a,int b){
-int r;
-if(a<b){
-    swap(a,b);}
-    r=a%b;
-    while(r){
-        a=b;
-        b=r;
-        r=a%b;
-    }
-    return b;
-};
-class Frac{
-public:
-    Frac(){
-    num=1;
-    denom=1;
 
-}
-Frac(int n,int d){
-num=n;
-denom=d;
-}
-double decimal(){
-return (double)num/denom;
-}
-Frac add(Frac b){
-    Frac result;
-    result.num=b.num*denom+num*b.denom;
-    result.denom=denom*b.denom;
-    result.normalize();
-    return result;}
-    void print(ostream &out){
-    out<<num<<"/"<<denom;
-    }
+ using namespace std;
 
+ class Fraction
+ {
+ public:
+     Fraction()
+     {
+         num = 0;
+         denom = 1;
+     }
 
+     Fraction(int n, int d)
+     {
+         num = n;
+         denom = d;
+     }
+     void print(ostream &out)
+     {
+         out << num;
+         if (denom > 1)
+         {
+             out << "/" << denom;
+         }
+         cout << endl;
+     }
 
-    int getNumerator(){
-    return num;}
-    void normalize(){
-    int a=num;
-    int b=denom;
-    int r;
-    if(a<b){
-    swap(a,b);}
-    r=a%b;
-    while(r){
-        a=b;
-        b=r;
-        r=a%b;
-    } num/=b;
-    denom/=b;
-    }
-private:
-    int num;
-    int denom;
-};
-int main(){
-    Frac a(1,3);
-        Frac b(1,3);
-        Frac c=a.add(b);
+     Fraction add(Fraction other)
+     {
+         Fraction result;
 
-    cout<<c.decimal()<<endl;
-    c.normalize();
-    c.print(cout);
-    cout<<endl;
+         result.num = num * other.denom + other.num * denom;
+         result.denom = denom * other.denom;
+         result.normalize();
+         return result;
+     }
 
-return 0;}
+ private:
+     int num;
+     int denom;
+
+     void normalize()
+     {
+         int div = gcd(num, denom);
+         num /= div;
+         denom /= div;
+     }
+     int gcd(int a, int b)
+     {
+         if (a < b)
+         {
+             swap(a, b);
+         }
+         int r = a - b;
+         while (r)
+         {
+             a = b;
+             b = r;
+             r = a - b;
+         }
+         return b;
+     }
+ };
+
+ int main()
+ {
+     Fraction zero;
+     zero.print(cout);
+
+     Fraction oneThird(1, 3);
+     oneThird.print(cout);
+
+     Fraction oneSixth(1, 6);
+     oneSixth.print(cout);
+
+     Fraction oneHalf = oneThird.add(oneSixth);
+     oneHalf.print(cout);
+
+     Fraction one = oneHalf.add(oneHalf);
+     one.print(cout);
+
+     return 0;
+ }
+
